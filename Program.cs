@@ -1,37 +1,82 @@
 ﻿using System.Text;
-using HocCS;
-
-
-
-
-Console.OutputEncoding = Encoding.UTF8;
-
-var students = new Person();
-
-Console.Write("Nhập số lượng học sinh: ");
-int numOfStudents = int.Parse(Console.ReadLine());
-
-for (int i = 0; i < numOfStudents; i++)
+using QuanLyDiemHS;
+public class Program
 {
-    Console.WriteLine("Nhập thông tin học sinh thứ "+ i+1 +" :");
+    //chắc chắn tạo danh sách đối tượng Student phải public 
+    public static List<Student> students = new List<Student>();
 
-    Person student = new Person();
+    public static void Main(string[] args)
+    {
+        Console.OutputEncoding = Encoding.UTF8;
 
-    Console.Write("Nhập họ tên học sinh: ");
-    student.Name = Console.ReadLine();
+        bool flag = true; //true là lặp liên tục
+        while(flag)
+        {
+            Console.WriteLine("1. Nhập thông tin học sinh mới.");
+            Console.WriteLine("2. Kiểm tra danh sách học sinh.");
+            Console.WriteLine("3. Thoát.");
+            Console.Write("Vui lòng chọn: ");
+            int choose = int.Parse(Console.ReadLine());
+            switch(choose)
+            {
+                case 1:
+                    AddStudent();
+                    break;
+                case 2:
+                    ListStudent();
+                    break;
+                default:
+                    flag = false; //ta gán để kết thúc
+                    break;
+            }
+        }
+    }
 
-    student.MathScore = Person.GetScore("Toán", student.Name);
-    student.EnglishScore = Person.GetScore("Tiếng Anh", student.Name);
-    student.ScienceScore = Person.GetScore("Khoa học", student.Name);
-}
+    private static void AddStudent()
+    {
+        bool flag = true;
+        while (flag)
+        {
+            Student hs = new Student();
 
-Console.WriteLine("Danh sách học sinh đã nhập: ");
-for (int i = 0; i < numOfStudents; i++)
-{
-    Console.WriteLine("Họ và tên: " + student.Name);
-    Console.WriteLine("Điểm Toán: " + student.MathScore);
-    Console.WriteLine("Điểm Tiếng Anh: " + student.EnglishScore);
-    Console.WriteLine("Điểm Khoa học: " + student.ScienceScore);
-    Console.WriteLine("Điểm Trung Bình: " + student.AverageScore());
-    Console.WriteLine("Xếp loại: " + student.GetClassification());
+            Console.Write("Nhập họ tên học sinh: ");
+            hs.name = Console.ReadLine();
+
+            hs.mathScore = hs.NhapDiemMonHoc(hs.name,"Toán");
+
+            hs.englishScore = hs.NhapDiemMonHoc(hs.name, "Tiếng Anh");
+
+            hs.scienceScore = hs.NhapDiemMonHoc(hs.name, "XH");
+
+            students.Add(hs); //Thêm học sinh mới vào
+
+            Console.WriteLine("1. Tiếp tục.");
+            Console.WriteLine("2. Thoát.");
+
+            Console.WriteLine("Vui lòng chọn: ");
+            int choose =int.Parse(Console.ReadLine());  
+            switch (choose)
+            {
+                case 1:
+                    continue;
+                default:
+                    flag = false;  
+                    break;
+
+            }
+        }
+    }
+    private static void ListStudent()
+    {
+        foreach(var hs in students)
+        {
+            Console.WriteLine($"Họ tên HS:{hs.name}");
+            Console.WriteLine($"Điểm Toán: {hs.mathScore}");
+            Console.WriteLine($"Điểm Anh: {hs.englishScore}");
+            Console.WriteLine($"Điểm XH: {hs.scienceScore}");
+            Console.WriteLine($"Điểm Trung Bình: {hs.AverageScore()}");
+            Console.WriteLine($"Xếp loại HS là: {hs.GetClassification()}");
+
+        }
+    }
 }
